@@ -1,18 +1,25 @@
 // imports
-require("dotenv").config();
-const path = require("path");
-const cors = require("cors");
-const express = require("express");
-const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
+import dotenv from "dotenv";
+import path from "path";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import express from "express";
+import mongoose from "mongoose";
+
+// custom imports
+import { connectDb } from "./config/dbConn";
+
+// dotenv configuration
+dotenv.config();
 
 // port
-const port = process.env.port || 5000;
+const PORT = process.env.PORT || 5000;
 
 // app
 const app = express();
 
 // database connection initialization
+connectDb();
 
 // cors option
 
@@ -32,6 +39,9 @@ console.log("serving file from: ", path.join(__dirname, "../public"));
 // routes
 
 // server
-app.listen(port, () => {
-  console.log("Server running on port", port);
+mongoose.connection.once("open", () => {
+  console.log("Connected to Mongo DB");
+  app.listen(PORT, () => {
+    console.log("Server running on port", PORT);
+  });
 });
