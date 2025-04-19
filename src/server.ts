@@ -7,7 +7,7 @@ import express from "express";
 import mongoose from "mongoose";
 
 // custom imports
-import { connectDb } from "./config/dbConn";
+import connectDb from "./config/dbConn";
 
 // dotenv configuration
 dotenv.config();

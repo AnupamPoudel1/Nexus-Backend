@@ -11,18 +11,12 @@ const clientOptions: ConnectOptions = {
   dbName: "nexus",
 };
 
-const mongoURI = process.env.DATABASE_URL;
+const mongoURI = process.env.DATABASE_URL || "";
 
-if (!mongoURI) {
-  throw new Error("Error: Database URL is not defined in .env file");
-}
-
-const connectDb = async () => {
+export default async function connectDb() {
   try {
     await mongoose.connect(mongoURI, clientOptions);
   } catch (err) {
     console.log("Oops!! Error occured during database connection", err);
   }
-};
-
-export { connectDb };
+}
