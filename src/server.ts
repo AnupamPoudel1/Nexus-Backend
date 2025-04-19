@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 
 // custom imports
 import connectDb from "./config/dbConn";
+import { corsOption } from "./config/corsOption";
+import credentials from "./middlewares/credentials.middleware";
 
 // dotenv configuration
 dotenv.config();
@@ -22,6 +24,8 @@ const app = express();
 connectDb();
 
 // cors option
+app.use(credentials);
+app.use(cors(corsOption));
 
 // cookie parser
 app.use(cookieParser());
