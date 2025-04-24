@@ -23,14 +23,21 @@ async function getAllBlogs(req: Request, res: Response) {
     .limit(limit);
 
   // if no blogs found
-  if (blogs.length === 0)
-    return res.status(204).json({ message: "Blogs not found" });
+  if (blogs.length === 0) {
+    return res.status(200).json({
+      blogs: [],
+      message: "No blogs found",
+      currentPage: page,
+      totalPages: 0,
+      totalBlogs: 0,
+    });
+  }
 
   // if blogs found
   const totalBlogs = await blogModel.countDocuments();
   const totalPages = Math.ceil(totalBlogs / limit);
 
-  res.json({
+  res.status(200).json({
     blogs,
     currentPage: page,
     totalPages: totalPages,
