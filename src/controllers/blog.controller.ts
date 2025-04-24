@@ -24,7 +24,7 @@ async function getAllBlogs(req: Request, res: Response) {
 
   // if no blogs found
   if (blogs.length === 0) {
-    return res.status(200).json({
+    return res.status(204).json({
       blogs: [],
       message: "No blogs found",
       currentPage: page,
@@ -99,7 +99,7 @@ async function createNewBlog(req: Request, res: Response) {
       alt,
       metaTitle,
       metaDescription,
-      slug,
+      slug: normalizedSlug,
       title,
       subHeading,
       content,
@@ -132,9 +132,11 @@ async function updateBlog(req: Request, res: Response) {
 
   if (hasError) return;
 
-  //   update blogs
+  //   find blog in database
   const blog = await blogModel.findById(id).exec();
   if (!blog) return res.status(204).json({ message: "Blog not found" });
+
+  // update blog
   try {
     if (image) {
       const public_id = crypto.randomBytes(10).toString("hex");
@@ -185,14 +187,13 @@ async function deleteBlog(req: Request, res: Response) {
 
   //   validate missing fields
   const hasError = validateFields({ id }, res);
-
   if (hasError) return;
 
   // validate if blog exists
   const blog = await blogModel.findById(id).exec();
-
   if (!blog) return res.json(204).json({ message: "Blog not found" });
 
+  // delete blog
   try {
     if (blog.image?.public_id) {
       await deleteFromCloudinary(blog.image.public_id);
