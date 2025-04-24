@@ -1,10 +1,10 @@
-import blogModel from "../models/blogs.model";
+import blogModel from "../models/blog.model";
 import crypto from "crypto";
 import { Request, Response } from "express";
 import validateFields from "../helpers/validateFields.helper";
 import updateDocumentFields from "../helpers/updateDocumentFields.helper";
 import uploadToCloudinary from "../helpers/uploadToCloudinary.helper";
-import deleteFromCloudinary from "../helpers/deleteFromCloudinary";
+import deleteFromCloudinary from "../helpers/deleteFromCloudinary.helper";
 
 // get all blogs
 async function getAllBlogs(req: Request, res: Response) {
