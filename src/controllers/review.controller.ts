@@ -27,7 +27,7 @@ async function getAllReviews(req: Request, res: Response) {
       reviews: [],
       message: "No reviews found",
       currentPage: page,
-      totalPage: 0,
+      totalPages: 0,
       totalReviews: 0,
     });
   }
