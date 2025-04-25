@@ -154,4 +154,4 @@ async function handleLogout(req: Request, res: Response) {
   return res.sendStatus(204);
 }
 
-export { handleLogin, handleRefresh };
+export { handleLogin, handleRefresh, handleLogout };
