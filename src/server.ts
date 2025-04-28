@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 import connectDb from "./config/dbConn";
 import { corsOption } from "./config/corsOption";
 import credentials from "./middlewares/credentials.middleware";
+import blogRouter from "./routes/blogs.route";
 
 // dotenv configuration
 dotenv.config();
@@ -41,7 +42,7 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 console.log("serving file from: ", path.join(__dirname, "../public"));
 
 // routes
-app.use("/blogs");
+app.use("/api/v1/blogs", blogRouter);
 
 // server
 mongoose.connection.once("open", () => {
