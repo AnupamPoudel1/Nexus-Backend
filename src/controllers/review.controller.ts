@@ -142,7 +142,7 @@ async function deleteReview(req: Request, res: Response) {
 
 // find one review
 async function getReview(req: Request, res: Response) {
-  const { id } = req.body;
+  const { id } = req.params;
 
   //   validate missing fields
   const hasError = validateFields({ id }, res);
@@ -161,4 +161,4 @@ async function getReview(req: Request, res: Response) {
   }
 }
 
-export = { getAllReviews, createReview, updateReview, deleteReview, getReview };
+export { getAllReviews, createReview, updateReview, deleteReview, getReview };

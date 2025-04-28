@@ -11,6 +11,7 @@ import connectDb from "./config/dbConn";
 import { corsOption } from "./config/corsOption";
 import credentials from "./middlewares/credentials.middleware";
 import blogRouter from "./routes/blogs.route";
+import reviewRouter from "./routes/review.route";
 
 // dotenv configuration
 dotenv.config();
@@ -43,6 +44,7 @@ console.log("serving file from: ", path.join(__dirname, "../public"));
 
 // routes
 app.use("/api/v1/blogs", blogRouter);
+app.use("/api/v1/review", reviewRouter);
 
 // server
 mongoose.connection.once("open", () => {
