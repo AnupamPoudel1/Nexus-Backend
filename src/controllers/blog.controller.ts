@@ -105,9 +105,9 @@ async function createNewBlog(req: Request, res: Response) {
       content,
     });
 
-    return res.json(201).json({ message: "New blog created successfully" });
+    return res.status(201).json({ message: "New blog created successfully" });
   } catch (error: any) {
-    return res.json(500).json({
+    return res.status(500).json({
       message: error.message || "Oops!! something went wrong. Try Again.",
     });
   }
@@ -191,7 +191,7 @@ async function deleteBlog(req: Request, res: Response) {
 
   // validate if blog exists
   const blog = await blogModel.findById(id).exec();
-  if (!blog) return res.json(204).json({ message: "Blog not found" });
+  if (!blog) return res.status(204).json({ message: "Blog not found" });
 
   // delete blog
   try {
