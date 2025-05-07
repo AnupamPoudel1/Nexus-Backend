@@ -7,12 +7,13 @@ import {
   getBlog,
 } from "../controllers/blog.controller";
 import catchAsync from "../helpers/catchAsync.helper";
+import { upload } from "../middlewares/multer.middleware";
 
 const blogRouter = Router();
 
 blogRouter.get("/", catchAsync(getAllBlogs));
-blogRouter.post("/create", catchAsync(createNewBlog));
-blogRouter.put("/update", catchAsync(updateBlog));
+blogRouter.post("/create", upload.single("image"), catchAsync(createNewBlog));
+blogRouter.put("/update", upload.single("image"), catchAsync(updateBlog));
 blogRouter.delete("/delete", catchAsync(deleteBlog));
 blogRouter.get("/:slug", catchAsync(getBlog));
 

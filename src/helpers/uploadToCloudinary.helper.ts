@@ -1,19 +1,25 @@
-import cloudinary from "../config/cloudinary.config";
+import { v2 as cloudinaryV2 } from "cloudinary"; // ensure v2 import for typings
 
-export default async function uploadToCloudinary(
-  image: string,
+export default function uploadToCloudinary(
+  fileBuffer: Buffer,
   public_id: string,
   folder?: string
 ): Promise<string> {
-  try {
-    const response = await cloudinary.uploader.upload(image, {
-      resource_type: "auto",
-      public_id,
-      folder,
-    });
+  return new Promise((resolve, reject) => {
+    const stream = cloudinaryV2.uploader.upload_stream(
+      {
+        resource_type: "auto",
+        public_id,
+        folder,
+      },
+      (error, result) => {
+        if (error) {
+          return reject(new Error("Image upload failed: " + error.message));
+        }
+        resolve(result!.secure_url);
+      }
+    );
 
-    return response.secure_url;
-  } catch (error: any) {
-    throw new Error("Image upload failed");
-  }
+    stream.end(fileBuffer); // Send buffer to stream
+  });
 }

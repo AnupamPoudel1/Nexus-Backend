@@ -47,21 +47,12 @@ async function getAllBlogs(req: Request, res: Response) {
 
 // create blogs
 async function createNewBlog(req: Request, res: Response) {
-  const {
-    image,
-    alt,
-    metaTitle,
-    metaDescription,
-    slug,
-    title,
-    subHeading,
-    content,
-  } = req.body;
+  const { alt, metaTitle, metaDescription, slug, title, subHeading, content } =
+    req.body;
 
   //   validating missing fields
   const hasError = validateFields(
     {
-      image,
       alt,
       metaTitle,
       metaDescription,
@@ -88,8 +79,12 @@ async function createNewBlog(req: Request, res: Response) {
         .json({ message: "Blog with this slug already exists" });
     }
 
+    // upload image to cloudinary
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required." });
+    }
     const public_id = crypto.randomBytes(10).toString("hex");
-    const imageURL = await uploadToCloudinary(image, public_id);
+    const imageURL = await uploadToCloudinary(req.file.buffer, public_id);
 
     await blogModel.create({
       image: {
@@ -117,7 +112,6 @@ async function createNewBlog(req: Request, res: Response) {
 async function updateBlog(req: Request, res: Response) {
   const {
     id,
-    image,
     alt,
     metaTitle,
     metaDescription,
@@ -138,9 +132,10 @@ async function updateBlog(req: Request, res: Response) {
 
   // update blog
   try {
-    if (image) {
+    // upload image to cloudinary
+    if (req.file) {
       const public_id = crypto.randomBytes(10).toString("hex");
-      const imageURL = await uploadToCloudinary(image, public_id);
+      const imageURL = await uploadToCloudinary(req.file.buffer, public_id);
 
       blog.image = { imageURL, public_id };
     }
