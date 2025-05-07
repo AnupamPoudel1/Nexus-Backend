@@ -45,16 +45,20 @@ async function getAllReviews(req: Request, res: Response) {
 
 // create new reviews
 async function createReview(req: Request, res: Response) {
-  const { image, alt, fullName, statement } = req.body;
+  const { alt, fullName, statement } = req.body;
 
   //   validate missing fields
-  const hasError = validateFields({ image, alt, fullName, statement }, res);
+  const hasError = validateFields({ alt, fullName, statement }, res);
 
   if (hasError) return;
 
   try {
+    // upload image to cloudinary
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required." });
+    }
     const public_id = crypto.randomBytes(10).toString("hex");
-    const imageURL = await uploadToCloudinary(image, public_id);
+    const imageURL = await uploadToCloudinary(req.file.buffer, public_id);
 
     await reviewModel.create({
       image: {
@@ -76,7 +80,7 @@ async function createReview(req: Request, res: Response) {
 
 // update reviews
 async function updateReview(req: Request, res: Response) {
-  const { id, image, alt, fullName, statement } = req.body;
+  const { id, alt, fullName, statement } = req.body;
 
   //   validate missing fields
   const hasError = validateFields({ id }, res);
@@ -89,9 +93,9 @@ async function updateReview(req: Request, res: Response) {
 
   //   update review
   try {
-    if (image) {
+    if (req.file) {
       const public_id = crypto.randomBytes(10).toString("hex");
-      const imageURL = await uploadToCloudinary(image, public_id);
+      const imageURL = await uploadToCloudinary(req.file.buffer, public_id);
 
       review.image = { imageURL, public_id };
     }

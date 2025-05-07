@@ -7,12 +7,13 @@ import {
   getReview,
 } from "../controllers/review.controller";
 import catchAsync from "../helpers/catchAsync.helper";
+import { upload } from "../middlewares/multer.middleware";
 
 const reviewRouter = Router();
 
 reviewRouter.get("/", catchAsync(getAllReviews));
-reviewRouter.post("/create", catchAsync(createReview));
-reviewRouter.put("/update", catchAsync(updateReview));
+reviewRouter.post("/create", upload.single("image"), catchAsync(createReview));
+reviewRouter.put("/update", upload.single("image"), catchAsync(updateReview));
 reviewRouter.delete("/delete", catchAsync(deleteReview));
 reviewRouter.get("/:id", catchAsync(getReview));
 
